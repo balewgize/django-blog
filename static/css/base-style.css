@@ -1,0 +1,52 @@
+/* Base style applied across all pages */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Merriweather, Merriweather-sans;
+}
+a {
+text-decoration: none;
+}
+.main {
+padding: 0;
+background: rgb(250, 250, 250);
+}
+.dot:after {
+content: "·";
+margin-left: 5px;
+margin-right: 5px;
+}
+.hero {
+    background: #eae7dc;
+}
+.card:hover {
+    box-shadow: 0 10px 28px #E3E7EB;
+}
+.card-title a {
+    color: inherit;
+}
+.read-more span {
+    display: none;
+}
+.read-more:hover span {
+    display: inline;
+}
+.category {
+    color: #555;
+}
+.author-link {
+    color: #555;
+    font-weight: bold;
+}
+.category:hover, .author-link:hover {
+    color: #111;
+}
+.bookmark {
+    all: unset;
+    padding: 5px;
+    border-radius: 50%;
+}
+.bookmark:hover {
+    cursor: pointer;
+}
