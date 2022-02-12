@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.utils.text import slugify
-from django.utils.crypto import get_random_string
+
+from common import utils
 
 
 class MyUserManager(BaseUserManager):
@@ -78,18 +78,5 @@ class MyUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         """Assign unique slug before saving the user."""
-        self.slug = self.generate_slug()
+        self.slug = utils.generate_slug(self.__class__, self.get_full_name())
         return super().save(*args, **kwargs)
-
-    def generate_slug(self):
-        """Return unique slug generated from full name of the User."""
-        full_name = self.get_full_name()
-        unique_slug = slugify(full_name)
-        is_taken = MyUser.objects.filter(slug=unique_slug).exists()
-
-        while is_taken:
-            random_string = get_random_string(length=5)
-            unique_slug = slugify(f"{full_name} {random_string}")
-            is_taken = MyUser.objects.filter(slug=unique_slug).exists()
-        else:
-            return unique_slug
