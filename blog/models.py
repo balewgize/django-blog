@@ -25,15 +25,15 @@ class Category(models.Model):
 class Post(models.Model):
     """Blog posts written by users or the admin."""
 
-    STATUS = [(False, "Draft"), (True, "Published")]
+    STATUS = [(0, "Draft"), (1, "Publish")]
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=206, unique=True)
     content = models.TextField()
-    is_published = models.BooleanField(choices=STATUS, default=False)
-    date_posted = models.DateTimeField(auto_now=True)
+    status = models.SmallIntegerField(choices=STATUS, default=0)
+    last_update = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.title
