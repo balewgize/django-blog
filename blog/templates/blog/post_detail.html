@@ -83,7 +83,7 @@
                 </div>
                 <div class="mt-5">
                     <!-- <span>Read more posts in </span> -->
-                    <a href="#" class="category-detail">Programming</a>
+                    <a href="{% url 'blog:category' post.category.slug %}" class="category-detail">Programming</a>
                 </div>
                 <hr class="my-4" />
                 <div class="d-flex align-items-start">

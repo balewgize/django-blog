@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Home {% endblock %}
+{% block title %} Explore posts in {{ category_posts.0.category.name }} {% endblock %}
 
 {% block main %}
 
@@ -12,7 +12,8 @@
     <div class="container pt-5">
         <div class="row">
             <div class="col-md-7">
-                {% for post in posts %}
+                <h3 class="mx-auto mb-5">{{ category_posts.0.category.name }} ({{ category_posts|length }}) </h3>
+                {% for post in category_posts %}
                 <div class="card mb-4">
                     <div class="card-body">
                         <h4 class="card-title mb-0"><a href="{% url 'blog:post-detail' post.slug %}">Post title this is
@@ -21,8 +22,7 @@
                                 or more</a></h4>
                         <div class="small text-muted">
                             <a href="#" class="author-link">Alemnew Marie</a>
-                            <a class="d-none d-md-inline category"
-                                href="{% url 'blog:category' post.category.slug %}">in <strong>Programming</strong></a>
+                            <a class="d-none d-md-inline category" href="#">in <strong>Programming</strong></a>
                             <span>&nbsp;|&nbsp;</span>
                             <span>Feb 12</span><span class="dot"></span><span>5 min read</span>
                         </div>

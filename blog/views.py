@@ -83,4 +83,11 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 class CategoryView(ListView):
-    pass
+    """Show all post in a certain category."""
+
+    model = Post
+    template_name = "blog/category.html"
+    context_object_name = "category_posts"
+
+    def get_queryset(self):
+        return Post.objects.filter(category__slug=self.kwargs.get("slug"))
