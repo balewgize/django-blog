@@ -2,7 +2,112 @@
 {% block title %} Post title {% endblock %}
 
 {% block main %}
+{% include "navbar.html" %}
 
-<h3>Welcome! This is post detail page</h3>
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-7 mx-auto">
+            <article class="blog-post" v-if="post">
+                <h1 class="post-title">Post title this is long post title that span two lines</h1>
+                <div class="text-muted d-flex align-items-end justify-content-between">
+                    <div class="d-flex">
+                        <div>
+                            <div class="d-flex align-items-end">
+                                <a href="#" class="author-link me-2">Alemnew Marie</a>
+                                <button class="btn btn-sm btn-primary follow">
+                                    Follow
+                                </button>
+                            </div>
+                            <div class="text-muted">
+                                <span>Feb 12</span><span class="dot"></span>
+                                <span>5 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="bookmark" title="Bookmark story">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <div class="post-content mt-2">
+                    <p>
+                        This blog post shows a few different types of content that's
+                        supported and styled with Bootstrap. Basic typography, lists,
+                        tables, images, code, and more are all supported as expected.
+                    </p>
+                    <p>
+                        This is some additional paragraph placeholder content. It has been
+                        written to fill the available space and show how a longer snippet
+                        of text affects the surrounding content. We'll repeat it often to
+                        keep the demonstration flowing, so be on the lookout for this
+                        exact same string of text.
+                    </p>
+                    <p>
+                        This is some additional paragraph placeholder content. It has been
+                        written to fill the available space and show how a longer snippet
+                        of text affects the surrounding content. We'll repeat it often to
+                        keep the demonstration flowing, so be on the lookout for this
+                        exact same string of text.
+                    </p>
+                    <h3>Example lists</h3>
+                    <p>
+                        This is some additional paragraph placeholder content. It's a
+                        slightly shorter version of the other highly repetitive body text
+                        used throughout. This is an example unordered list:
+                    </p>
+                    <ul>
+                        <li>First list item</li>
+                        <li>Second list item with a longer description</li>
+                        <li>Third list item to close it out</li>
+                    </ul>
+                    <p>
+                        This is some additional paragraph placeholder content. It has been
+                        written to fill the available space and show how a longer snippet
+                        of text affects the surrounding content. We'll repeat it often to
+                        keep the demonstration flowing, so be on the lookout for this
+                        exact same string of text.
+                    </p>
+                    <h3>Sub-heading</h3>
+                    <p>
+                        This is some additional paragraph placeholder content. It has been
+                        written to fill the available space and show how a longer snippet
+                        of text affects the surrounding content. We'll repeat it often to
+                        keep the demonstration flowing, so be on the lookout for this
+                        exact same string of text.
+                    </p>
+                    <pre><code>Example code block</code></pre>
+                    <p>
+                        This is some additional paragraph placeholder content. It's a
+                        slightly shorter version of the other highly repetitive body text
+                        used throughout.
+                    </p>
+                </div>
+                <div class="mt-5">
+                    <!-- <span>Read more posts in </span> -->
+                    <a href="#" class="category-detail">Programming</a>
+                </div>
+                <hr class="my-4" />
+                <div class="d-flex align-items-start">
+                    <div class="about-author p-3 d-flex flex-column">
+                        <span class="d-block text-muted text-small">WRITTEN BY</span>
+                        <div class="d-flex align-items-start justify-content-md-between mb-2">
+                            <a href="#" class="author-link me-2">Alemnew Marie</a>
+                            <button class="btn btn-sm btn-primary follow">Follow</button>
+                        </div>
+                        <div class="text-muted pe-md-5 bio">
+                            Can't stop sharing my experience and knowledge with other
+                            people. I write my thoughts on startups, technology and
+                            marketing.
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+    <div class="related mt-5">
+        <h3>More from Tomar</h3>
+        <hr class="my-4" />
+        <!-- Related or popular posts goes here -->
+    </div>
+</div>
 
 {% endblock %}

@@ -4,6 +4,8 @@ from django.urls import path
 from . import views
 
 
+app_name = "blog"
+
 urlpatterns = [
     path("", views.HomePageView.as_view(), name="post-list"),
     path("p/new/", views.PostCreateView.as_view(), name="post-create"),
