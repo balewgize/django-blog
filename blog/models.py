@@ -40,6 +40,9 @@ class Post(models.Model):
     def __str__(self) -> str:
         return self.title
 
+    class Meta:
+        ordering = ["-last_update"]
+
     def save(self, *args, **kwargs):
         """Assign unique slug from post title."""
         self.slug = utils.generate_slug(self.__class__, self.title)

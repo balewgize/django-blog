@@ -19,7 +19,7 @@
                             <a href="{% url 'blog:post-detail' post.slug %}">{{ post.title }}</a>
                         </h4>
                         <div class="small text-muted">
-                            <a href="{% url 'accounts:profile' post.author.slug %}"
+                            <a href="{% url 'accounts:profile' post.author.uid %}"
                                 class="author-link">{{ post.author.get_full_name }}</a>
                             <a class="d-none d-md-inline category"
                                 href="{% url 'blog:category' post.category.slug %}">in

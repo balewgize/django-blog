@@ -1,54 +1,27 @@
 {% extends "base.html" %}
-{% block title %} Profile {% endblock %}
+{% block title %} Draft posts {% endblock %}
 
 {% block main %}
 {% include "navbar.html" %}
 
-<div class="container-fluid a-hero">
-    <div class="row">
-        <div class="container py-4">
-            <div class="d-flex flex-column flex-md-row col-12 col-lg-6 mx-auto">
-                <div class="flex-grow-1 pt-2">
-                    <div class="d-flex align-items-center justify-content-center justify-content-md-start mb-0">
-                        <span class="me-2 fs-4">{{ user.get_full_name }}</span>
-                        <button class="btn btn-sm btn-primary follow">Follow</button>
-                    </div>
-                    <p class="text-md-start text-center">
-                        Fullstack Django developer
-                    </p>
-                    <div class="text-muted text-md-start text-center mt-2">
-                        <span>26k Followers</span><span class="dot"></span>
-                        <span>163 Following</span> <span class="dot"></span>
-                        <a href="#" class="ms-1 text-secondary">About</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="container-fluid">
     <div class="row">
         <div class="container pt-4">
             <!-- Author posts -->
-            {% if author_posts|length > 0%}
-            {% for post in author_posts %}
+            {% if draft_posts|length > 0 %}
+            {% for post in draft_posts %}
             <div class="col-12 col-lg-6 mx-auto">
                 <div class="mycard">
                     <div class="d-flex flex-column">
                         <h4 class="card-title">
                             <a href="{% url 'blog:post-detail' post.slug %}" class="mb-2 lh-sm">{{ post.title }}</a>
                         </h4>
-                        <p class="card-text mb-2 lh-base">
-                            In this post we will see how can we validate a form data and show
-                            error messages ot the user.
-                        </p>
                     </div>
                     <div class="mb-0 text-muted d-flex align-items-end align-items-md-center justify-content-between">
                         <div>
                             <a class="d-none d-md-inline category-btn"
                                 href="{% url 'blog:category' post.category.slug %}">{{ post.category }}</a>
                             <span>Feb 12</span><span class="dot"></span><span>5 min read</span>
-                            <!-- <span class="d-none d-md-inline dot"></span> -->
 
                         </div>
                         {% if request.user == post.author %}
@@ -71,7 +44,7 @@
             {% endfor %}
             {% else %}
             <div class="col-12 col-lg-6 mx-auto">
-                <p>Sorry! {{ user.first_name }} doesn't have any posts yet.</p>
+                <p>You don't have any draft posts yet. Start writing to edit it any time.</p>
             </div>
             {% endif %}
         </div>

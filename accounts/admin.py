@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import MyUser
+from .models import MyUser, Bookmark
 
 
 @admin.register(MyUser)
@@ -33,3 +33,8 @@ class MyUserAdmin(UserAdmin):
     search_fields = ("email", "first_name", "last_name")
     readonly_fields = ("last_login", "date_joined")
     ordering = ("email",)
+
+
+@admin.register(Bookmark)
+class BookmarkAdmin(admin.ModelAdmin):
+    list_display = ("user", "post", "saved_at")

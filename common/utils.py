@@ -18,3 +18,15 @@ def generate_slug(Klass, base_word):
         is_taken = Klass.objects.filter(slug=unique_slug).exists()
     else:
         return unique_slug
+
+
+def generate_uid(Klass):
+    """Generate 12 character random string that is unique in the Klass."""
+    uid = get_random_string(length=12)
+    is_taken = Klass.objects.filter(uid=uid).exists()
+
+    while is_taken:
+        uid = get_random_string(length=12)
+        is_taken = Klass.objects.filter(uid=uid).exists()
+    else:
+        return uid

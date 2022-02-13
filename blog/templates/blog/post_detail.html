@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Post title {% endblock %}
+{% block title %} {{ post.title }} {% endblock %}
 
 {% block main %}
 {% include "navbar.html" %}
@@ -94,7 +94,7 @@
                     <div class="about-author d-flex flex-column">
                         <span class="d-block text-muted text-small">WRITTEN BY</span>
                         <div class="d-flex align-items-start justify-content-md-between mb-2">
-                            <a href="{% url 'accounts:profile' post.author.slug %}"
+                            <a href="{% url 'accounts:profile' post.author.uid %}"
                                 class="author-link me-2">{{ post.author.get_full_name }}</a>
                             <button class="btn btn-sm btn-primary follow">Follow</button>
                         </div>

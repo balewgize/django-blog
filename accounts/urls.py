@@ -20,5 +20,7 @@ urlpatterns = [
         auth_views.LogoutView.as_view(next_page="blog:post-list"),
         name="logout",
     ),
-    path("<str:slug>/", views.UserProfileView.as_view(), name="profile"),
+    path("<str:uid>/", views.UserProfileView.as_view(), name="profile"),
+    path("<str:uid>/draft/", views.DraftPostView.as_view(), name="draft"),
+    path("<str:uid>/saved/", views.SavedPostView.as_view(), name="saved"),
 ]

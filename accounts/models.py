@@ -1,7 +1,9 @@
-from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
 
 from common import utils
+from blog.models import Post
 
 
 class MyUserManager(BaseUserManager):
@@ -63,7 +65,7 @@ class MyUser(AbstractUser):
     )
     first_name = models.CharField("first name", max_length=150)
     last_name = models.CharField("last name", max_length=150)
-    slug = models.SlugField(max_length=50, unique=True)
+    uid = models.CharField("UID", max_length=12)
     is_admin = models.BooleanField(default=False)
 
     objects = MyUserManager()
@@ -80,5 +82,18 @@ class MyUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         """Assign unique slug before saving the user."""
-        self.slug = utils.generate_slug(self.__class__, self.get_full_name())
+        self.uid = utils.generate_uid(self.__class__)
         return super().save(*args, **kwargs)
+
+
+class Bookmark(models.Model):
+    """Saved posts by the user."""
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    saved_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["user", "post"], name="unique_bookmarking")
+        ]

@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from accounts.models import MyUser
 from .models import Category, Post
 
 

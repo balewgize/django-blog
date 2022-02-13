@@ -11,6 +11,17 @@ text-decoration: none;
 nav {
     box-shadow: 0 2px 2px #E3E7EB;
 }
+.subscribe {
+    border-radius: 30px;
+    font-size: 0.9rem;
+    margin-left: 10px;
+    font-weight: 600;
+    padding: 5px 10px;
+    margin-bottom: 0;
+}
+#signup {
+    color: #fff;
+}
 .main {
 padding: 0;
 background: rgb(250, 250, 250);
@@ -93,5 +104,11 @@ margin-right: 5px;
     }
     #div_id_last_name {
         margin-left: 2%;
+    }
+    .action {
+        display: none;
+    }
+    .mycard:hover .action {
+        display: inline-block;
     }
 }

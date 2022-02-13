@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.shortcuts import get_object_or_404, render, redirect
@@ -12,7 +13,7 @@ from django.views.generic import ListView
 
 from blog.models import Post
 from .forms import SignupForm
-from .models import MyUser
+from .models import MyUser, Bookmark
 from .tokens import email_confirmation_token
 
 
@@ -24,13 +25,51 @@ class UserProfileView(ListView):
 
     def get_queryset(self):
         # Filtering posts by the user only
-        self.user = get_object_or_404(MyUser, slug=self.kwargs.get("slug"))
-        return Post.objects.filter(author=self.user).order_by("-last_update")
+        self.user = get_object_or_404(MyUser, uid=self.kwargs.get("uid"))
+        return (
+            Post.objects.filter(author=self.user)
+            .filter(status=1)
+            .order_by("-last_update")
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user"] = self.user
         return context
+
+
+class DraftPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    """Show list of draft post that has not been published."""
+
+    template_name = "accounts/user_draft.html"
+    context_object_name = "draft_posts"
+
+    def get_queryset(self):
+        return (
+            Post.objects.filter(author=self.user)
+            .filter(status=0)
+            .order_by("-last_update")
+        )
+
+    def test_func(self):
+        # check the user trying to view drafts is the owner
+        self.user = get_object_or_404(MyUser, uid=self.kwargs.get("uid"))
+        return self.request.user == self.user
+
+
+class SavedPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    """Show list of bookmarked posts."""
+
+    template_name = "accounts/user_saved.html"
+    context_object_name = "saved_posts"
+
+    def get_queryset(self):
+        return Bookmark.objects.filter(user=self.user).order_by("-saved_at")
+
+    def test_func(self):
+        # check the user trying to view drafts is the owner
+        self.user = get_object_or_404(MyUser, uid=self.kwargs.get("uid"))
+        return self.request.user == self.user
 
 
 def signup(request):

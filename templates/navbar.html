@@ -14,24 +14,34 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'blog:post-create' %}">Write</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Saved</a>
-                </li>
                 {% if not request.user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'accounts:login' %}">Sign in</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="signup" href="{% url 'accounts:signup' %}">Get Started</a>
+                    <a class="nav-link btn btn-primary subscribe" id="signup" href="{% url 'accounts:signup' %}">Get
+                        Started</a>
                 </li>
                 {% else %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-bs-toggle="dropdown"
-                        aria-expanded="false">Dropdown</a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdown04">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        aria-expanded="false">More</a>
+                    <ul class="dropdown-menu" aria-labelledby="more options">
+                        <li><a class="dropdown-item" href="{% url 'accounts:draft' request.user.uid %}"><i
+                                    class="far fa-edit me-2"></i>Draft</a></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:saved' request.user.uid %}"><i
+                                    class="fas fa-bookmark me-3"></i>Saved</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'accounts:profile' request.user.uid %}"><i
+                                    class="far fa-user me-3"></i>Profile</a>
+                        </li>
+                        <li>
+                            <hr class="my-1" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'accounts:logout' %}"><i
+                                    class="fas fa-arrow-right me-3"></i>Sign out</a>
+                        </li>
                     </ul>
                 </li>
                 {% endif %}
