@@ -19,7 +19,7 @@
                         <h4 class="card-title mb-0"><a
                                 href="{% url 'blog:post-detail' post.slug %}">{{ post.title }}</a></h4>
                         <div class="small text-muted">
-                            <a href="{% url 'accounts:profile' post.author.slug %}"
+                            <a href="{% url 'accounts:profile' post.author.uid %}"
                                 class="author-link">{{ post.author.get_full_name }}</a>
                             <span>&nbsp;|&nbsp;</span>
                             <span>Feb 12</span><span class="dot"></span><span>5 min read</span>

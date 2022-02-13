@@ -8,19 +8,20 @@
     <div class="row">
         <div class="container pt-4">
             <!-- Author posts -->
-            {% if saved_posts|length > 0 %}
-            {% for post in saved_posts %}
+            {% if bookmarks|length > 0 %}
+            {% for bookmark in bookmarks %}
             <div class="col-12 col-lg-6 mx-auto">
                 <div class="mycard">
                     <div class="d-flex flex-column">
                         <h4 class="card-title">
-                            <a href="{% url 'blog:post-detail' post.slug %}" class="mb-2 lh-sm">{{ post.title }}</a>
+                            <a href="{% url 'blog:post-detail' bookmark.post.slug %}"
+                                class="mb-2 lh-sm">{{ bookmark.post.title }}</a>
                         </h4>
                     </div>
                     <div class="mb-0 text-muted d-flex align-items-end align-items-md-center justify-content-between">
                         <div>
                             <a class="d-none d-md-inline category-btn"
-                                href="{% url 'blog:category' post.category.slug %}">{{ post.category }}</a>
+                                href="{% url 'blog:category' bookmark.post.category.slug %}">{{ bookmark.post.category }}</a>
                             <span>Feb 12</span><span class="dot"></span><span>5 min read</span>
                         </div>
                         <button class="bookmark" title="Bookmark story">

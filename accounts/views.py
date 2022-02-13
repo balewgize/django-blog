@@ -61,10 +61,10 @@ class SavedPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     """Show list of bookmarked posts."""
 
     template_name = "accounts/user_saved.html"
-    context_object_name = "saved_posts"
+    context_object_name = "bookmarks"
 
     def get_queryset(self):
-        return Bookmark.objects.filter(user=self.user).order_by("-saved_at")
+        return Bookmark.objects.select_related("post").filter(user=self.user).order_by("-saved_at")
 
     def test_func(self):
         # check the user trying to view drafts is the owner
