@@ -4,7 +4,9 @@
 {% block main %}
 
 {% include "navbar.html" %}
+{% if not request.user.is_authenticated %}
 {% include "hero.html" %}
+{% endif %}
 
 <div class="container-fluid main">
     <div class="container pt-5">

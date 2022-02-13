@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
@@ -23,7 +24,7 @@ class PostDetailView(DetailView):
     template_name = "blog/post_detail.html"
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     """Display post creation form and handle the process."""
 
     model = Post
@@ -35,7 +36,7 @@ class PostCreateView(CreateView):
         form.instance.author = self.request.user
         messages.success(
             self.request,
-            "You have successfully published a new post.",
+            "Your post has been saved.",
         )
         return super().form_valid(form)
 
