@@ -15,14 +15,15 @@
                 {% for post in posts %}
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h4 class="card-title mb-0"><a href="{% url 'blog:post-detail' post.slug %}">Post title this is
-                                long post
-                                title that span two lines
-                                or more</a></h4>
+                        <h4 class="card-title mb-0">
+                            <a href="{% url 'blog:post-detail' post.slug %}">{{ post.title }}</a>
+                        </h4>
                         <div class="small text-muted">
-                            <a href="#" class="author-link">Alemnew Marie</a>
+                            <a href="{% url 'accounts:profile' post.author.slug %}"
+                                class="author-link">{{ post.author.get_full_name }}</a>
                             <a class="d-none d-md-inline category"
-                                href="{% url 'blog:category' post.category.slug %}">in <strong>Programming</strong></a>
+                                href="{% url 'blog:category' post.category.slug %}">in
+                                <strong>{{ post.category }}</strong></a>
                             <span>&nbsp;|&nbsp;</span>
                             <span>Feb 12</span><span class="dot"></span><span>5 min read</span>
                         </div>

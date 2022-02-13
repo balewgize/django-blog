@@ -7,26 +7,29 @@
 <div class="container py-4">
     <div class="row">
         <div class="col-lg-7 mx-auto">
-            <article class="blog-post" v-if="post">
-                <h1 class="post-title">Post title this is long post title that span two lines</h1>
+            <article class="blog-post">
+                <h1 class="post-title">{{ post.title }}</h1>
                 <div class="text-muted d-flex align-items-end justify-content-between">
                     <div class="d-flex">
                         <div>
-                            <div class="d-flex align-items-end">
-                                <a href="#" class="author-link me-2">Alemnew Marie</a>
-                                <button class="btn btn-sm btn-primary follow">
-                                    Follow
-                                </button>
-                            </div>
                             <div class="text-muted">
                                 <span>Feb 12</span><span class="dot"></span>
                                 <span>5 min read</span>
                             </div>
                         </div>
                     </div>
+                    {% if request.user == post.author %}
+                    <div>
+                        <a href="{% url 'blog:post-update' post.slug %}" title="Edit post"><i
+                                class="far fa-edit"></i></a>
+                        <a href="{% url 'blog:post-delete' post.slug %}" class="ms-1" title="Delete post"><i
+                                class="fas fa-trash"></i></a>
+                    </div>
+                    {% else %}
                     <button class="bookmark" title="Bookmark story">
                         <i class="far fa-bookmark"></i>
                     </button>
+                    {% endif %}
                 </div>
                 <div class="post-content mt-2">
                     <p>
@@ -83,14 +86,16 @@
                 </div>
                 <div class="mt-5">
                     <!-- <span>Read more posts in </span> -->
-                    <a href="{% url 'blog:category' post.category.slug %}" class="category-detail">Programming</a>
+                    <a href="{% url 'blog:category' post.category.slug %}"
+                        class="category-detail">{{ post.category }}</a>
                 </div>
                 <hr class="my-4" />
                 <div class="d-flex align-items-start">
-                    <div class="about-author p-3 d-flex flex-column">
+                    <div class="about-author d-flex flex-column">
                         <span class="d-block text-muted text-small">WRITTEN BY</span>
                         <div class="d-flex align-items-start justify-content-md-between mb-2">
-                            <a href="#" class="author-link me-2">Alemnew Marie</a>
+                            <a href="{% url 'accounts:profile' post.author.slug %}"
+                                class="author-link me-2">{{ post.author.get_full_name }}</a>
                             <button class="btn btn-sm btn-primary follow">Follow</button>
                         </div>
                         <div class="text-muted pe-md-5 bio">

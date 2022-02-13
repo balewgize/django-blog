@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Sign Up for Tomar {% endblock %}
+
+{% block main %}
+{% include "navbar.html" %}
+
+<div class="container-fluid main">
+  <div class="row">
+    <div class="col-sm-12 col-md-8 col-lg-5 mx-auto">
+      <div class="card border-0 shadow rounded-3 my-4">
+        <div class="card-body p-4">
+          <h5 class="card-title text-center fw-light fs-5">Create a new Account</h5>
+          <form method="POST"> {% csrf_token %}
+            {{ signup_form|crispy }}
+
+            <div class="d-grid">
+              <button class="btn btn-primary btn-block" type="submit"> Sign up </button>
+            </div>
+            <br />
+            <div class="text-center">
+              Already have an account?
+              <a href="{% url 'accounts:login'%}">Sign in</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

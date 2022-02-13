@@ -68,3 +68,30 @@ margin-right: 5px;
     background: rgba(0, 0, 0, 0.07);
     text-decoration: none;
 }
+/* Account page styles */
+.a-hero {
+    background: #eae7dc;
+}
+.category-btn {
+    background: rgb(238, 238, 238);
+    color: #444;
+    border-radius: 10px;
+    padding: 5px 8px;
+    text-align: center;
+    margin-right: 10px;
+}
+#div_id_first_name, #div_id_last_name {
+    width: 100%;
+}
+@media screen and (min-width: 768px) {
+    #div_id_first_name, #div_id_last_name {
+        width: 47.5%;
+        display: inline-block;
+    }
+    #div_id_first_name {
+        margin-right: 2%;
+    }
+    #div_id_last_name {
+        margin-left: 2%;
+    }
+}

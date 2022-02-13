@@ -61,6 +61,8 @@ class MyUser(AbstractUser):
             "unique": "An account with this email address already exists.",
         },
     )
+    first_name = models.CharField("first name", max_length=150)
+    last_name = models.CharField("last name", max_length=150)
     slug = models.SlugField(max_length=50, unique=True)
     is_admin = models.BooleanField(default=False)
 
