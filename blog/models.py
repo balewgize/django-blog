@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
+from ckeditor.fields import RichTextField
 
 from common import utils
 
@@ -31,9 +33,17 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=206, unique=True)
-    content = models.TextField()
+    content = RichTextField()
     status = models.SmallIntegerField(choices=STATUS, default=0)
     last_update = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.title
+
+    def save(self, *args, **kwargs):
+        """Assign unique slug from post title."""
+        self.slug = utils.generate_slug(self.__class__, self.title)
+        return super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("blog:post-detail", kwargs={"slug": self.slug})

@@ -28,16 +28,17 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     """Display post creation form and handle the process."""
 
     model = Post
-    fields = ["category", "title", "content"]
+    fields = ["category", "title", "content", "status"]
     template_name = "blog/post_create.html"
 
     def form_valid(self, form):
         # assign the current logged in user as author of the post
         form.instance.author = self.request.user
-        messages.success(
-            self.request,
-            "Your post has been saved.",
-        )
+        if form.instance.status == 0:
+            msg = "Your post has been saved to draft."
+        elif form.instance.status == 1:
+            msg = "Your post has been published."
+        messages.success(self.request, msg)
         return super().form_valid(form)
 
 

@@ -12,10 +12,11 @@
     <div class="container pt-5">
         <div class="row">
             <div class="col-md-7">
-                {% for i in '12345'|make_list %}
+                {% for post in posts %}
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h4 class="card-title mb-0"><a href="#">Post title this is long post
+                        <h4 class="card-title mb-0"><a href="{% url 'blog:post-detail' post.slug %}">Post title this is
+                                long post
                                 title that span two lines
                                 or more</a></h4>
                         <div class="small text-muted">
@@ -28,7 +29,8 @@
                             additional content.
                             With supporting text below as a natural lead-in to additional content...</p>
                         <div class="d-flex justify-content-between">
-                            <a href="#" class="read-more">Read more <span>&rarr;</span></a>
+                            <a href="{% url 'blog:post-detail' post.slug %}" class="read-more">Read more
+                                <span>&rarr;</span></a>
                             <button class="bookmark" title="Bookmark story">
                                 <i class="far fa-bookmark"></i>
                             </button>

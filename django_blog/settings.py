@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crispy_forms",
     "crispy_bootstrap5",
+    "ckeditor",
     "blog.apps.BlogConfig",
     "accounts.apps.AccountsConfig",
 ]
@@ -135,3 +136,25 @@ AUTH_USER_MODEL = "accounts.MyUser"
 # Settings for django-crispy-forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# django-ckeditor
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            ["Bold", "Italic", "Underline"],
+            [
+                "NumberedList",
+                "BulletedList",
+                "-",
+                "Blockquote",
+                "-",
+                "Outdent",
+                "Indent",
+            ],
+            ["Link", "Unlink"],
+            ["Source"],
+        ],
+        "width": 700,
+    }
+}
