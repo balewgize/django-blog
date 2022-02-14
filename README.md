@@ -2,10 +2,9 @@
 
 Multi-user Blog website built with ```Django 3.2.12``` and ```Bootstrap 5.1.3```
 
-- My aim is to build a free and easy to use website where we, Dajngo developers, share knowledge,
- tuorials, tips & tricks, best practices and experience about Django on a site built with with Django.
+My aim of creating this website is to build a free and easy to use website where we, the Django developers, can share tuorials, tips & tricks, best practices and experience about Django on a site built with with Django.
 
-<strong>- If you want to share what you learned to help others and yourself by solidifying it, please consider
+<strong>If you want to share what you learned to help others and yourself, please consider
  contributing to the project, either in development or by writing posts after it has been deployed. </strong>
 
 - We can consider it as a FREE (Only for Django developers) alternative to Medium.com or Dev.to
@@ -13,8 +12,10 @@ Multi-user Blog website built with ```Django 3.2.12``` and ```Bootstrap 5.1.3```
 ## Features
 - Multi user
 - Email verification
-- Bookmark posts
-- Follow and Following
+- Profile with title and about
+- Bookmark posts (soon)
+- Social login (soon)
+- Follow and Following (soon)
 - Draft and Published posts
 - CRUD posts with permission
 - Custom user model with email login
@@ -52,7 +53,7 @@ pip install -r requirements.txt
 ```
 
 ## Provide credentials in .env file
-- Create a file named .env inside django_blog folder (project root dir)
+- Create a file named .env inside django_blog folder (the project root dir)
 
 - Provide credentials in key=value format without qoutes as follows
 ```

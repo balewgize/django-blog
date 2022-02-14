@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %} Home {% endblock %}
 
 {% block main %}
@@ -41,7 +42,8 @@
                         <div class="d-flex justify-content-between">
                             <a href="{% url 'blog:post-detail' post.slug %}" class="read-more">Read more
                                 <span>&rarr;</span></a>
-                            <button class="bookmark" title="Bookmark story">
+                            {% csrf_token %}
+                            <button class="bookmark" value="{{ post.pk }}" title="Bookmark story">
                                 <i class="far fa-bookmark"></i>
                             </button>
                         </div>
@@ -81,4 +83,9 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'accounts/js/app.js' %}"></script>
 {% endblock %}

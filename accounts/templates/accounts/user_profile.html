@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %} Profile {% endblock %}
 
 {% block main %}
@@ -45,7 +46,7 @@
             <!-- Author posts -->
             {% if author_posts|length > 0%}
             {% for post in author_posts %}
-            <div class="col-12 col-lg-7 mx-auto">
+            <div class="col-12 col-lg-8 mx-auto">
                 <div class="mycard">
                     <div class="d-flex flex-column">
                         <h4 class="card-title">
@@ -72,7 +73,8 @@
                                     class="fas fa-trash"></i></a>
                         </div>
                         {% else %}
-                        <button class="bookmark" title="Bookmark story">
+                        {% csrf_token %}
+                        <button class="bookmark" value="{{ post.pk}}" title="Bookmark story">
                             <i class="far fa-bookmark"></i>
                         </button>
                         {% endif %}
@@ -94,4 +96,9 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'accounts/js/app.js' %}"></script>
 {% endblock %}

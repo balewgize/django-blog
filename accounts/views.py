@@ -5,12 +5,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views.generic import ListView
+from django.views.generic import ListView, View
 
 from blog.models import Post
 from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm
@@ -78,6 +78,36 @@ class SavedPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         # check the user trying to view drafts is the owner
         self.user = get_object_or_404(Account, uid=self.kwargs.get("uid"))
         return self.request.user == self.user
+
+
+class BookmarkPost(View):
+    """Handle bookmarking post using ajax calls."""
+
+    def post(self, request):
+        user = self.request.user
+        if user.is_authenticated:
+            # bookmark selected post
+            post_id = request.POST.get("post_id")
+            selected_post = Post.objects.get(pk=post_id)
+            is_bookmarked = False  # initial assumption
+            bookmark = Bookmark.objects.filter(user=user, post=selected_post).first()
+            if bookmark:
+                # The user has already saved it, unsave now
+                bookmark.delete()
+            else:
+                # save the bookmark now
+                Bookmark.objects.create(user=user, post=selected_post)
+                is_bookmarked = True
+            return JsonResponse(
+                {"is_bookmarked": is_bookmarked, "post_id": post_id}, status=200
+            )
+        else:
+            # Not authenticated
+            messages.info(
+                self.request,
+                "Login to your account to bookmark posts.",
+            )
+            return JsonResponse({"is_bookmarked": False}, status=401)
 
 
 def signin(request):

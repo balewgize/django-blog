@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %} Saved posts {% endblock %}
 
 {% block main %}
@@ -24,8 +25,9 @@
                                 href="{% url 'blog:category' bookmark.post.category.slug %}">{{ bookmark.post.category }}</a>
                             <span>Feb 12</span><span class="dot"></span><span>5 min read</span>
                         </div>
-                        <button class="bookmark" title="Bookmark story">
-                            <i class="far fa-bookmark"></i>
+                        {% csrf_token %}
+                        <button class="bookmark" value="{{ bookmark.post.pk}}" title="Bookmark story">
+                            <i class="fas fa-bookmark"></i>
                         </button>
                     </div>
                 </div>
@@ -41,4 +43,8 @@
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'accounts/js/app.js' %}"></script>
 {% endblock %}
