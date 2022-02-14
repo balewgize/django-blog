@@ -20,7 +20,8 @@ class Category(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = utils.generate_slug(self.__class__, self.name)
+        if not self.slug:
+            self.slug = utils.generate_slug(self.__class__, self.name)
         super().save(*args, **kwargs)
 
 
@@ -45,7 +46,8 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         """Assign unique slug from post title."""
-        self.slug = utils.generate_slug(self.__class__, self.title)
+        if not self.slug:
+            self.slug = utils.generate_slug(self.__class__, self.title)
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):

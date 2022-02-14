@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -12,7 +13,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import ListView
 
 from blog.models import Post
-from .forms import SignupForm, LoginForm
+from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm
 from .models import Account, Bookmark
 from .tokens import email_confirmation_token
 
@@ -28,6 +29,8 @@ class UserProfileView(ListView):
         self.user = get_object_or_404(Account, uid=self.kwargs.get("uid"))
         return (
             Post.objects.filter(author=self.user)
+            .select_related("category")
+            .select_related("author")
             .filter(status=1)
             .order_by("-last_update")
         )
@@ -47,6 +50,7 @@ class DraftPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_queryset(self):
         return (
             Post.objects.filter(author=self.user)
+            .select_related("post")
             .filter(status=0)
             .order_by("-last_update")
         )
@@ -166,3 +170,25 @@ def inform_to_verify(request):
     else:
         context = {"first_name": "User"}
     return render(request, "accounts/verify.html", context=context)
+
+
+@login_required
+def update_profile(request, uid):
+    """Update profile for authenticated user."""
+    if request.method == "POST":
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Your account has been updated successfully.")
+            return redirect(to=reverse("accounts:profile", args=(uid,)))
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        "user_form": user_form,
+        "profile_form": profile_form,
+    }
+    return render(request, "accounts/update_profile.html", context)

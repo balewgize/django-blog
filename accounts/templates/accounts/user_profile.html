@@ -7,7 +7,7 @@
 <div class="container-fluid a-hero">
     <div class="row">
         <div class="container pt-2 pb-3">
-            <div class="col-md-6 mx-auto">
+            <div class="col-md-7 mx-auto">
                 {% if messages %}
                 {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show pb-2" role="alert">
@@ -17,32 +17,35 @@
                 {% endfor %}
                 {% endif %}
             </div>
-            <div class="d-flex flex-column flex-md-row col-12 col-lg-6 mx-auto">
+            <div class="d-flex flex-column align-items-center">
                 <div class="flex-grow-1 pt-2">
                     <div class="d-flex align-items-center justify-content-center justify-content-md-start mb-0">
                         <span class="me-2 fs-4">{{ user.get_full_name }}</span>
+                        {% if request.user == user %}
+                        <a href="{% url 'accounts:update-profile' user.uid %}" title="Update your profile"><i
+                                class="fas fa-user-edit ms-2"></i></a>
+                        {% else %}
                         <button class="btn btn-sm btn-primary follow">Follow</button>
+                        {% endif %}
                     </div>
                     <p class="text-md-start text-center">
-                        Fullstack Django developer
+                        {{ user.profile.title }}
                     </p>
                     <div class="text-muted text-md-start text-center mt-2">
-                        <span>26k Followers</span><span class="dot"></span>
-                        <span>163 Following</span> <span class="dot"></span>
-                        <a href="#" class="ms-1 text-secondary">About</a>
+                        <span>26k Followers</span><span class="dot"></span><span>163 Following</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="container pt-4">
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-md-8">
             <!-- Author posts -->
             {% if author_posts|length > 0%}
             {% for post in author_posts %}
-            <div class="col-12 col-lg-6 mx-auto">
+            <div class="col-12 col-lg-7 mx-auto">
                 <div class="mycard">
                     <div class="d-flex flex-column">
                         <h4 class="card-title">
@@ -80,10 +83,14 @@
             </div>
             {% endfor %}
             {% else %}
-            <div class="col-12 col-lg-6 mx-auto">
+            <div class="col-12 col-lg-7 mx-auto">
                 <p>Sorry! {{ user.first_name }} doesn't have any posts published yet.</p>
             </div>
             {% endif %}
+        </div>
+        <div class="col-md-3">
+            <h4>About me</h4>
+            <p>{{ user.profile.about }}</p>
         </div>
     </div>
 </div>

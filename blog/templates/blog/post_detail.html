@@ -100,16 +100,17 @@
                 <hr class="my-4" />
                 <div class="d-flex align-items-start">
                     <div class="about-author d-flex flex-column">
-                        <span class="d-block text-muted text-small">WRITTEN BY</span>
-                        <div class="d-flex align-items-start justify-content-md-between mb-2">
+                        <span class="d-block text-muted small">WRITTEN BY</span>
+                        <div class="d-flex align-items-end justify-content-md-between mb-1">
                             <a href="{% url 'accounts:profile' post.author.uid %}"
-                                class="author-link me-2">{{ post.author.get_full_name }}</a>
+                                class="author-link my-0 me-2">{{ post.author.get_full_name }}</a>
                             <button class="btn btn-sm btn-primary follow">Follow</button>
                         </div>
-                        <div class="text-muted pe-md-5 bio">
-                            Can't stop sharing my experience and knowledge with other
-                            people. I write my thoughts on startups, technology and
-                            marketing.
+                        <div>
+                            {{ post.author.profile.title }}
+                        </div>
+                        <div class="text-muted pe-md-5">
+                            {{ post.author.profile.about }}
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
-from .models import Post
+from .models import Category, Post
 
 
 class HomePageView(ListView):
@@ -14,7 +14,11 @@ class HomePageView(ListView):
     context_object_name = "posts"
 
     def get_queryset(self):
-        return Post.objects.filter(status=1)
+        return (
+            Post.objects.select_related("category")
+            .select_related("author")
+            .filter(status=1)
+        )
 
 
 class PostDetailView(DetailView):
@@ -23,6 +27,13 @@ class PostDetailView(DetailView):
     model = Post
     context_object_name = "post"
     template_name = "blog/post_detail.html"
+
+    def get_queryset(self):
+        return (
+            Post.objects.select_related("category")
+            .select_related("author")
+            .filter(slug=self.kwargs["slug"])
+        )
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -90,4 +101,11 @@ class CategoryView(ListView):
     context_object_name = "category_posts"
 
     def get_queryset(self):
-        return Post.objects.filter(category__slug=self.kwargs.get("slug"))
+        # category = Category.objects.filter(slug=self.kwargs.get("slug")).first()
+        # return category.post_set.all()
+
+        return (
+            Post.objects.select_related("category")
+            .select_related("author")
+            .filter(category__slug=self.kwargs.get("slug"))
+        )

@@ -79,8 +79,20 @@ class Account(AbstractUser):
 
     def save(self, *args, **kwargs):
         """Assign unique slug before saving the user."""
-        self.uid = utils.generate_uid(self.__class__)
+        if not self.uid:
+            self.uid = utils.generate_uid(self.__class__)
         return super().save(*args, **kwargs)
+
+
+class Profile(models.Model):
+    """Profile of the user besides the information provided during sign up."""
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=150, blank=True)
+    about = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.user.first_name}'s profile"
 
 
 class Bookmark(models.Model):

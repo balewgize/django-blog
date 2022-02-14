@@ -1,7 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Account, Bookmark
+from .models import Account, Bookmark, Profile
+
+
+class ProfileInline(admin.TabularInline):
+    model = Profile
 
 
 @admin.register(Account)
@@ -10,7 +14,7 @@ class AccountAdmin(UserAdmin):
 
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal Info", {"fields": ("first_name", "last_name", "slug")}),
+        ("Personal Info", {"fields": ("first_name", "last_name")}),
         ("Important dates", {"fields": ("last_login", "date_joined")}),
     )
     add_fieldsets = (
@@ -28,6 +32,7 @@ class AccountAdmin(UserAdmin):
             },
         ),
     )
+    inlines = [ProfileInline]
     list_display = ("email", "first_name", "last_name", "is_staff", "is_active")
     list_filter = ("is_staff", "is_superuser", "is_active")
     search_fields = ("email", "first_name", "last_name")

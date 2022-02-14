@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Account
+from .models import Account, Profile
 
 
 class LoginForm(forms.ModelForm):
@@ -27,8 +27,16 @@ class SignupForm(UserCreationForm):
 
 
 class UserUpdateForm(forms.ModelForm):
-    """A Form used to update user information."""
+    """Form used to update user information."""
 
     class Meta:
         model = Account
         fields = ["first_name", "last_name"]
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    """Form used to update profile of the user."""
+
+    class Meta:
+        model = Profile
+        fields = ["title", "about"]
