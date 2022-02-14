@@ -7,6 +7,14 @@
 <div class="container py-4">
     <div class="row">
         <div class="col-lg-7 mx-auto">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show pb-2" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
             <article class="blog-post">
                 <h1 class="post-title">{{ post.title }}</h1>
                 <div class="text-muted d-flex align-items-end justify-content-between">

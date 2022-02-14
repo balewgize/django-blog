@@ -59,9 +59,6 @@ class MyUser(AbstractUser):
         "email",
         max_length=200,
         unique=True,
-        error_messages={
-            "unique": "An account with this email address already exists.",
-        },
     )
     first_name = models.CharField("first name", max_length=150)
     last_name = models.CharField("last name", max_length=150)

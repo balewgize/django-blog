@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.contrib.messages import constants as messages
 
 load_dotenv()  # take environment variables from .env
 
@@ -145,6 +146,11 @@ EMAIL_PORT = "587"
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ["EMAIL_USER"]
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_PASS"]
+
+# Customize default ERROR message tag to bootstratp alet-danger
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
 
 # Settings for django-crispy-forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

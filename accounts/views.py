@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -12,7 +12,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import ListView
 
 from blog.models import Post
-from .forms import SignupForm
+from .forms import SignupForm, LoginForm
 from .models import MyUser, Bookmark
 from .tokens import email_confirmation_token
 
@@ -64,12 +64,41 @@ class SavedPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     context_object_name = "bookmarks"
 
     def get_queryset(self):
-        return Bookmark.objects.select_related("post").filter(user=self.user).order_by("-saved_at")
+        return (
+            Bookmark.objects.select_related("post")
+            .filter(user=self.user)
+            .order_by("-saved_at")
+        )
 
     def test_func(self):
         # check the user trying to view drafts is the owner
         self.user = get_object_or_404(MyUser, uid=self.kwargs.get("uid"))
         return self.request.user == self.user
+
+
+def signin(request):
+    """Display login form and handle the login process."""
+    if request.user.is_authenticated:
+        return redirect("blog:post-list")
+
+    if request.method == "POST":
+        email = request.POST["email"]
+        password = request.POST["password"]
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("blog:post-list")
+        else:
+            messages.error(request, "Invalid Email or Password.")
+    login_form = LoginForm()
+    context = {"login_form": login_form}
+    return render(request, "accounts/login.html", context)
+
+
+def signout(request):
+    """Log the user out."""
+    logout(request)
+    return redirect("blog:post-list")
 
 
 def signup(request):
