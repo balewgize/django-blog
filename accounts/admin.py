@@ -1,11 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import MyUser, Bookmark
+from .models import Account, Bookmark
 
 
-@admin.register(MyUser)
-class MyUserAdmin(UserAdmin):
+@admin.register(Account)
+class AccountAdmin(UserAdmin):
     """Admin for a custom user model with no username field."""
 
     fieldsets = (

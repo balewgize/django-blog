@@ -13,7 +13,7 @@ from django.views.generic import ListView
 
 from blog.models import Post
 from .forms import SignupForm, LoginForm
-from .models import MyUser, Bookmark
+from .models import Account, Bookmark
 from .tokens import email_confirmation_token
 
 
@@ -25,7 +25,7 @@ class UserProfileView(ListView):
 
     def get_queryset(self):
         # Filtering posts by the user only
-        self.user = get_object_or_404(MyUser, uid=self.kwargs.get("uid"))
+        self.user = get_object_or_404(Account, uid=self.kwargs.get("uid"))
         return (
             Post.objects.filter(author=self.user)
             .filter(status=1)
@@ -53,7 +53,7 @@ class DraftPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def test_func(self):
         # check the user trying to view drafts is the owner
-        self.user = get_object_or_404(MyUser, uid=self.kwargs.get("uid"))
+        self.user = get_object_or_404(Account, uid=self.kwargs.get("uid"))
         return self.request.user == self.user
 
 
@@ -72,7 +72,7 @@ class SavedPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def test_func(self):
         # check the user trying to view drafts is the owner
-        self.user = get_object_or_404(MyUser, uid=self.kwargs.get("uid"))
+        self.user = get_object_or_404(Account, uid=self.kwargs.get("uid"))
         return self.request.user == self.user
 
 
@@ -141,8 +141,8 @@ def activate(request, uidb64, token):
     """Activate the user account after the confirms their email address."""
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
-        user = MyUser.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, MyUser.DoesNotExist):
+        user = Account.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, Account.DoesNotExist):
         user = None
 
     if user is not None and email_confirmation_token.check_token(user, token):

@@ -6,7 +6,7 @@ from common import utils
 from blog.models import Post
 
 
-class MyUserManager(BaseUserManager):
+class AccountManager(BaseUserManager):
     """A User manager for a custom user model with no username field."""
 
     use_in_migrations = True
@@ -46,7 +46,7 @@ class MyUserManager(BaseUserManager):
         return self._create_user(email, first_name, last_name, password, **extrafields)
 
 
-class MyUser(AbstractUser):
+class Account(AbstractUser):
     """
     A class implementing a fully featured custom User model with
     admin-compliant permissions.
@@ -65,7 +65,7 @@ class MyUser(AbstractUser):
     uid = models.CharField("UID", max_length=12)
     is_admin = models.BooleanField(default=False)
 
-    objects = MyUserManager()
+    objects = AccountManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]
