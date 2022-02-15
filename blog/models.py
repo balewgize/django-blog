@@ -46,9 +46,26 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         """Assign unique slug from post title."""
+        # Only when saving the post for the first time
         if not self.slug:
             self.slug = utils.generate_slug(self.__class__, self.title)
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
+        """Absolute URL to post detail page."""
         return reverse("blog:post-detail", kwargs={"slug": self.slug})
+
+
+class Comment(models.Model):
+    """User's comment on posts."""
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    content = models.TextField(verbose_name="", max_length=300)
+    commented_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.content
+
+    class Meta:
+        ordering = ["-commented_on"]

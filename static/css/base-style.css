@@ -57,8 +57,17 @@ margin-right: 5px;
 }
 .bookmark {
     all: unset;
-    padding: 5px;
+    padding: 0 5px;
     border-radius: 50%;
+}
+.upvote, .downvote {
+    all: unset;
+    padding: 0 5px;
+}
+.react {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    padding: 1px 8px;
 }
 .bookmark:hover {
     cursor: pointer;
@@ -99,6 +108,14 @@ footer {
 .footer-links a:hover {
     text-decoration: underline;   
 }
+#id_content {
+    height: 120px;
+}
+.comment-content{
+    color: #444;
+    font-size: 0.9rem;
+}
+/* Responsive */
 @media screen and (min-width: 768px) {
     #div_id_first_name, #div_id_last_name {
         width: 47.5%;
@@ -110,10 +127,13 @@ footer {
     #div_id_last_name {
         margin-left: 2%;
     }
-    .action {
+    .action, .comment-action {
         display: none;
     }
     .mycard:hover .action {
+        display: inline-block;
+    }
+    .comment:hover .comment-action{
         display: inline-block;
     }
 }

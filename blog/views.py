@@ -3,9 +3,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 
-from .models import Post
+from .models import Post, Comment
+from .forms import CommentForm
 
 
 class HomePageView(View):
@@ -70,6 +72,8 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = "blog/post_update.html"
 
     def form_valid(self, form):
+        # After updating the user will be redirected to the post detail
+        # page since we define get_absolute_url method in the Post model
         form.instance.author = self.request.user
         if form.instance.status == 0:
             msg = "Your post has been saved as draft."
@@ -79,7 +83,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return super().form_valid(form)
 
     def test_func(self):
-        # check that the person trying to update the post is owner of the post
+        # check that the person trying to update the post is the  owner
         return self.get_object().author == self.request.user
 
 
@@ -97,7 +101,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return reverse_lazy("accounts:profile", args=(author.uid,))
 
     def test_func(self):
-        # check that the person trying to delete the post is owner of the post
+        # check that the person trying to delete the post is the owner
         return self.get_object().author == self.request.user
 
 
@@ -109,11 +113,77 @@ class CategoryView(ListView):
     context_object_name = "category_posts"
 
     def get_queryset(self):
-        # category = Category.objects.filter(slug=self.kwargs.get("slug")).first()
-        # return category.post_set.all()
-
         return (
             Post.objects.select_related("category")
             .select_related("author")
             .filter(category__slug=self.kwargs.get("slug"))
         )
+
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Display comment update form and handle the process."""
+
+    model = Comment
+    fields = ["content"]
+    template_name = "blog/comment_update.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        # After updating the comment, redirect back to comments page
+        messages.info(self.request, "Your comment has been updated.")
+        post_slug = self.kwargs["slug"]
+        return reverse_lazy("blog:comment-list", args=(post_slug,))
+
+    def test_func(self):
+        # check that the person trying to update the comment is the owner
+        return self.get_object().author == self.request.user
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """Display comment deletion form and handle the process."""
+
+    model = Comment
+    template_name = "blog/comment_delete.html"
+
+    def get_success_url(self):
+        # After deleting the comment, redirect back to comments page
+        messages.info(self.request, "Your comment has been deleted.")
+        post_slug = self.kwargs["slug"]
+        return reverse_lazy("blog:comment-list", args=(post_slug,))
+
+    def test_func(self):
+        # check that the person trying to delete the comment is the owner
+        return self.get_object().author == self.request.user
+
+
+def comments(request, slug):
+    """Enable user to add comments on posts."""
+    comments = (
+        Comment.objects.select_related("author")
+        .select_related("post")
+        .filter(post__slug=slug)
+    )
+    post = get_object_or_404(Post, slug=slug)
+    if request.user.is_authenticated:
+        # Only authenticated users are allowed to comment on posts
+        if request.method == "POST":
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment_form.instance.author = request.user
+                comment_form.instance.post = post
+                comment_form.save()
+                messages.info(request, "Your response has been saved.")
+    else:
+        # Inform users to authenticate in order to add comments
+        messages.warning(request, "Login to your account to comment on posts.")
+
+    comment_form = CommentForm()
+    context = {
+        "comment_form": comment_form,
+        "comments": comments,
+        "post": post,
+    }
+    return render(request, "blog/comment.html", context)

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Delete comment {% endblock %}
+
+{% block page_css %}
+<style>
+    body {
+        background: #ebebeb;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-10 col-lg-6 mx-auto">
+            <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card-body p-2 p-sm-5" style="box-shadow: 0 0 10px rgba(71, 71, 71, 0.4);">
+                    <h5 class="card-title mb-4 fw-light fs-5">Delete comment</h5>
+                    <hr class="my-2" />
+                    <p class="mb-3">Are you sure you want to delete your comment?</p>
+                    <br>
+                    <form method="POST"> {% csrf_token %}
+                        <div>
+                            <button class="btn btn-danger" type="submit">Yes, Delete </button>
+                            <a class="btn btn-secondary" href="{% url 'blog:comment-list' comment.post.slug %}">Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
