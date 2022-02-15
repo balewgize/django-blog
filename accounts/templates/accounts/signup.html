@@ -6,12 +6,12 @@
 {% block main %}
 {% include "navbar.html" %}
 
-<div class="container-fluid main">
+<div class="container-fluid bg-light pb-5">
   <div class="row">
     <div class="col-sm-12 col-md-8 col-lg-5 mx-auto">
       <div class="card border-0 shadow rounded-3 my-4">
         <div class="card-body p-4">
-          <h5 class="card-title text-center fw-light fs-5">Create a new Account</h5>
+          <h5 class="card-title text-center fw-light mb-3 fs-5">Create a new Account</h5>
           <form method="POST"> {% csrf_token %}
             {{ signup_form|crispy }}
 
@@ -29,4 +29,6 @@
     </div>
   </div>
 </div>
+
+{% include "footer.html" %}
 {% endblock %}

@@ -1,14 +1,22 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
-from .models import Category, Post
+from .models import Post
 
 
-class HomePageView(ListView):
-    """Show the home page of the website."""
+class HomePageView(View):
+    """Show landing page of the website."""
+
+    def get(self, request):
+        return render(request, "blog/landing_page.html")
+
+
+class PostListView(ListView):
+    """Show the list of posts."""
 
     template_name = "blog/index.html"
     context_object_name = "posts"

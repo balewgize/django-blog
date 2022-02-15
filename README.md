@@ -7,12 +7,14 @@ My aim of creating this website is to build a free and easy to use website where
 <strong>If you want to share what you learned to help others and yourself, please consider
  contributing to the project, either in development or by writing posts after it has been deployed. </strong>
 
-- We can consider it as a FREE (Only for Django developers) alternative to Medium.com or Dev.to
+We can consider it as a FREE (Only for Django developers) alternative to Medium.com or Dev.to
+
+If you like the idea or found the project helpful, consider ```forking``` and ```Giving stars```.
 
 ## Features
 - Multi user
 - Email verification
-- Profile with title and about
+- Profile for users
 - Bookmark posts (soon)
 - Social login (soon)
 - Follow and Following (soon)

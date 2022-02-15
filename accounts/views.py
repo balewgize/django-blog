@@ -103,7 +103,7 @@ class BookmarkPost(View):
             )
         else:
             # Not authenticated
-            messages.info(
+            messages.warning(
                 self.request,
                 "Login to your account to bookmark posts.",
             )

@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-8 mx-auto">
-                <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card border-0 shadow rounded-3 mt-3 mb-5">
                     <div class="card-body p-4 p-sm-5" style="box-shadow: 0 0 5px rgba(71, 71, 71, 0.4);">
                         <h5 class="card-title text-center mb-4 fw-light fs-5">Share you ideas to the world</h5>
                         <form method="POST" style="overflow: auto;"> {% csrf_token %}
@@ -27,6 +27,8 @@
     </div>
 </div>
 
+{% include "footer.html" %}
+
 <script>
     const status = document.querySelector("#id_status");
     const btn = document.querySelector("#submitBtn");
@@ -38,6 +40,4 @@
         }
     })
 </script>
-
-
 {% endblock %}

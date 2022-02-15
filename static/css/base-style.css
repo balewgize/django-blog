@@ -3,13 +3,16 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Merriweather, Merriweather-sans;
+}
+body {
+    overflow-x: hidden;
 }
 a {
 text-decoration: none;
 }
-nav {
-    box-shadow: 0 2px 2px #E3E7EB;
+.tomarnav {
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 2px 2px -1px rgba(22, 16, 16, 0.2);
 }
 .subscribe {
     border-radius: 30px;
@@ -21,10 +24,6 @@ nav {
 }
 #signup {
     color: #fff;
-}
-.main {
-padding: 0;
-background: rgb(250, 250, 250);
 }
 .dot:after {
 content: "·";
@@ -93,6 +92,12 @@ margin-right: 5px;
 }
 #div_id_first_name, #div_id_last_name {
     width: 100%;
+}
+footer {
+    background-color: rgb(240, 238, 238);
+}
+.footer-links a:hover {
+    text-decoration: underline;   
 }
 @media screen and (min-width: 768px) {
     #div_id_first_name, #div_id_last_name {

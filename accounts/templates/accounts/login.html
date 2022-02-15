@@ -6,7 +6,7 @@
 {% block main %}
 {% include "navbar.html" %}
 
-<div class="container-fluid main">
+<div class="container-fluid bg-light pb-5">
     <div class="row">
         <div class="col-sm-12 col-md-8 col-lg-4 mx-auto">
             {% if messages %}
@@ -40,4 +40,6 @@
         </div>
     </div>
 </div>
+
+{% include "footer.html" %}
 {% endblock %}
