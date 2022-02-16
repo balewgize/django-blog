@@ -14,7 +14,7 @@ from django.views.generic import ListView, View
 
 from blog.models import Post
 from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm
-from .models import Account, Bookmark, UserFollowing
+from .models import Account, Bookmark, Like, UserFollowing
 from .tokens import email_confirmation_token
 
 
@@ -147,6 +147,36 @@ class FollowView(View):
                 "Login to your account to follow other users.",
             )
             return JsonResponse({"not_authenticated": True}, status=401)
+
+
+class LikeView(View):
+    """Handle like and unlike posts."""
+
+    def post(self, request):
+
+        user = self.request.user
+        if user.is_authenticated:
+            # the user is authenticated, go to like activity
+            user = Account.objects.get(pk=user.pk)
+            post_id = request.POST.get("post_id")
+            selected_post = Post.objects.get(pk=post_id)
+            is_liked = False  # initial assumption
+            if not selected_post in user.profile.likes:
+                # Like the post now
+                Like.objects.create(user=user, post=selected_post)
+                is_liked = True
+            else:
+                # Unlike the post
+                Like.objects.filter(user=user, post=selected_post).delete()
+
+            data = {"is_liked": is_liked, "likes_count": selected_post.like_set.count()}
+            return JsonResponse(data, status=200)
+        else:
+            messages.info(
+                self.request,
+                "Login to your account to like posts.",
+            )
+            return JsonResponse(data={"is_liked": False}, status=401)
 
 
 def signin(request):

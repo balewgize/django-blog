@@ -106,6 +106,11 @@ class Profile(models.Model):
         """All users following this user (follower wrt the to user)."""
         return [f.user for f in self.user.followers.all()]
 
+    @property
+    def likes(self):
+        """All posts liked by the user."""
+        return [like.post for like in self.user.likes.all()]
+
 
 class UserFollowing(models.Model):
     """
@@ -131,7 +136,7 @@ class UserFollowing(models.Model):
 
 
 class Bookmark(models.Model):
-    """Saved posts by the user."""
+    """Save posts for later reading."""
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -139,7 +144,21 @@ class Bookmark(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["user", "post"], name="unique_bookmarking")
+            models.UniqueConstraint(fields=["user", "post"], name="unique_bookmarks")
+        ]
+
+
+class Like(models.Model):
+    """Like posts that are interesting."""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="likes"
+    )
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["user", "post"], name="unique_likes")
         ]
 
 

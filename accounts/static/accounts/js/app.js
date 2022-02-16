@@ -2,10 +2,10 @@ $(document).ready(function () {
     // CSRF protection used by django for POST requests
     var csrf_token = $("input[name=csrfmiddlewaretoken]").val()
 
+    // AJAX request to save/unsave posts
     $(".bookmark").off("click").on("click", function () {
-        let $this = $(this); // clicked button
-        let post_id = $this.val();
-        console.log("POST_ID", post_id)
+        const $this = $(this); // clicked button
+        const post_id = $this.val();
 
         $.ajax({
             method: "POST",
@@ -30,16 +30,17 @@ $(document).ready(function () {
         })
     })
 
+    // AJAX request to follow/unfollow users
     $(".follow").off("click").on("click", function () {
-        let $this = $(this);
-        let user_id = $this.val();
+        const $this = $(this);
+        const user_id = $this.val();
         console.log("TARGET USER ID", user_id);
 
         $.ajax({
             method: "POST",
             url: "/ac/follow/",
             data: {
-                "user_id": user_id,
+                user_id: user_id,
                 csrfmiddlewaretoken: csrf_token,
             },
             statusCode: {
@@ -58,4 +59,30 @@ $(document).ready(function () {
             }
         })
     });
+
+    // AJAX request to like/unlike posts
+    $(".upvote").off("click").on("click", function () {
+        const $this = $(this); // clicked button
+        const post_id = $this.val();
+
+        $.ajax({
+            method: "POST",
+            url: "/ac/like/",
+            data: {
+                post_id: post_id,
+                csrfmiddlewaretoken: csrf_token,
+            },
+            statusCode: {
+                200: function (response) {
+                    const likes = response["likes_count"]
+                    if (response["is_liked"] == true) {
+                        $this.html('<span class="text-muted"><i class="fas fa-heart text-primary me-2"></i>' + likes + '</span>');
+                    }
+                },
+                401: function (response) {
+                    location.reload(); 
+                }
+            }
+        })
+    })
 })

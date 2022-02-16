@@ -13,6 +13,7 @@ urlpatterns = [
     path("verify/", views.inform_to_verify, name="verify"),
     path("follow/", views.FollowView.as_view(), name="follow"),
     path("bookmark/", views.BookmarkPost.as_view(), name="bookmark"),
+    path("like/", views.LikeView.as_view(), name="like"),
     path("confirm/<uidb64>/<token>/", views.activate, name="activate"),
     path("<str:uid>/", views.UserProfileView.as_view(), name="profile"),
     path("<str:uid>/update/", views.update_profile, name="update-profile"),
