@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
@@ -14,7 +14,7 @@ from django.views.generic import ListView, View
 
 from blog.models import Post
 from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm
-from .models import Account, Bookmark
+from .models import Account, Bookmark, UserFollowing
 from .tokens import email_confirmation_token
 
 
@@ -110,6 +110,45 @@ class BookmarkPost(View):
             return JsonResponse({"is_bookmarked": False}, status=401)
 
 
+class FollowView(View):
+    """Handle Follow and Unfollow process."""
+
+    def post(self, request):
+        current_user_id = self.request.user.pk
+        if self.request.user.is_authenticated:
+            # the user making the request
+            current_user = Account.objects.get(pk=current_user_id)
+
+            # ID of the user to follow or unfollow
+            user_id = request.POST["user_id"]
+            target_user = Account.objects.get(pk=user_id)
+            is_following = False  # initial assumption
+
+            # All users followed by current user (following wrt to the user)
+            following = [f.user_following for f in current_user.following.all()]
+
+            if not target_user in following:
+                # Start following now
+                print(f"I am here 2 {current_user} following {target_user} now.")
+                UserFollowing.objects.create(
+                    user=current_user, user_following=target_user
+                )
+                is_following = True
+            else:
+                # It was already following, Unfollow the user now
+                print(f"I am here 3 {current_user} stops following {target_user} now.")
+                UserFollowing.objects.filter(
+                    user=current_user, user_following=target_user
+                ).delete()
+            return JsonResponse({"is_following": is_following}, status=200)
+        else:
+            messages.info(
+                self.request,
+                "Login to your account to follow other users.",
+            )
+            return JsonResponse({"not_authenticated": True}, status=401)
+
+
 def signin(request):
     """Display login form and handle the login process."""
     if request.user.is_authenticated:
@@ -182,6 +221,7 @@ def activate(request, uidb64, token):
     if user is not None and email_confirmation_token.check_token(user, token):
         user.is_active = True
         user.save()
+        # Automatically log the user in up on successful confirmation
         login(request, user)
         messages.success(request, "Your email has been verified successfully.")
         messages.success(
@@ -205,20 +245,29 @@ def inform_to_verify(request):
 @login_required
 def update_profile(request, uid):
     """Update profile for authenticated user."""
-    if request.method == "POST":
-        user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, "Your account has been updated successfully.")
-            return redirect(to=reverse("accounts:profile", args=(uid,)))
-    else:
-        user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user.profile)
+    # Check if the user is authorized to edit the profile.
+    owner = Account.objects.get(uid=uid)
+    if request.user == owner:
+        # can edit its own profile
+        if request.method == "POST":
+            user_form = UserUpdateForm(request.POST, instance=request.user)
+            profile_form = ProfileUpdateForm(
+                request.POST, instance=request.user.profile
+            )
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                messages.success(request, "Your account has been updated successfully.")
+                return redirect(to=reverse("accounts:profile", args=(uid,)))
+        else:
+            user_form = UserUpdateForm(instance=request.user)
+            profile_form = ProfileUpdateForm(instance=request.user.profile)
 
-    context = {
-        "user_form": user_form,
-        "profile_form": profile_form,
-    }
-    return render(request, "accounts/update_profile.html", context)
+        context = {
+            "user_form": user_form,
+            "profile_form": profile_form,
+        }
+        return render(request, "accounts/update_profile.html", context)
+    else:
+        # Can't edit others profile
+        return HttpResponseForbidden("<h1>403 Forbidden</h1>")

@@ -25,15 +25,19 @@
                         {% if request.user == user %}
                         <a href="{% url 'accounts:update-profile' user.uid %}" title="Update your profile"><i
                                 class="fas fa-user-edit ms-2"></i></a>
+                        {% elif request.user in user.profile.followers %}
+                        <button class="btn btn-sm btn-outline-primary follow" value="{{ user.pk }}">Following</button>
                         {% else %}
-                        <button class="btn btn-sm btn-primary follow">Follow</button>
+                        <button class="btn btn-sm btn-primary follow" value="{{ user.pk }}">Follow</button>
                         {% endif %}
                     </div>
                     <p class="text-md-start text-center">
                         {{ user.profile.title }}
                     </p>
                     <div class="text-muted text-md-start text-center mt-2">
-                        <span>26k Followers</span><span class="dot"></span><span>163 Following</span>
+                        <span>{{ user.profile.followers|length }} Followers</span><span
+                            class="dot"></span><span>{{ user.profile.following|length }}
+                            Following</span>
                     </div>
                 </div>
             </div>

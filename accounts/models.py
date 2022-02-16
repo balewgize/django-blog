@@ -96,6 +96,39 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.first_name}'s profile"
 
+    @property
+    def following(self):
+        """All users followed by this user (following wrt to the user)."""
+        return [f.user_following for f in self.user.following.all()]
+
+    @property
+    def followers(self):
+        """All users following this user (follower wrt the to user)."""
+        return [f.user for f in self.user.followers.all()]
+
+
+class UserFollowing(models.Model):
+    """
+    Follower and Following relationship between users.
+
+    user: current user
+    user_following: target user current user is following
+    """
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="following"
+    )
+    user_following = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="followers"
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "user_following"], name="unique_follow"
+            )
+        ]
+
 
 class Bookmark(models.Model):
     """Saved posts by the user."""
