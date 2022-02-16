@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{% load post_read_time %}
+
 {% block title %} Home {% endblock %}
 
 {% block main %}
@@ -22,7 +24,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <h4 class="card-title mb-0">
-                            <a href="{% url 'blog:post-detail' post.slug %}">{{ post.title }}</a>
+                            <a href="{% url 'blog:post-detail' post.slug %}">{{ post.title|truncatechars:80 }}</a>
                         </h4>
                         <div class="small text-muted">
                             <a href="{% url 'accounts:profile' post.author.uid %}"
@@ -31,11 +33,10 @@
                                 href="{% url 'blog:category' post.category.slug %}">in
                                 <strong>{{ post.category }}</strong></a>
                             <span>&nbsp;|&nbsp;</span>
-                            <span>Feb 12</span><span class="dot"></span><span>5 min read</span>
+                            <span>{{ post.last_update|date:"M d" }}</span><span
+                                class="dot"></span><span>{{ post.content|readtime }}</span>
                         </div>
-                        <p class="card-text mt-1 text-muted">With supporting text below as a natural lead-in to
-                            additional content.
-                            With supporting text below as a natural lead-in to additional content...</p>
+                        <p class="card-text mt-1 text-muted">{{ post.content|truncatechars_html:130|safe }}</p>
                         <div class="d-flex justify-content-between">
                             <a href="{% url 'blog:post-detail' post.slug %}" class="read-more">Read more
                                 <span>&rarr;</span></a>
@@ -84,5 +85,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    // Change active nav element dynamically based on the URL
+    $(document).ready(function () {
+        const currentUrl = location.pathname;
+        $(".navbar-nav li").find("a.active").removeClass("active");
+        $(".navbar-nav li").find("a.active").removeAttr("aria-current");
+        $('.navbar-nav li a[href="' + currentUrl + '"]').addClass('active');
+        $('.navbar-nav li a[href="' + currentUrl + '"]').attr("aria-current", "page");
+    });
+</script>
 <script src="{% static 'accounts/js/app.js' %}"></script>
 {% endblock %}

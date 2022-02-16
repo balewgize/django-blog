@@ -18,7 +18,7 @@
                             {{ profile_form|crispy }}
                             <div>
                                 <button class="btn btn-primary mr-2" type="submit" id="submitBtn">Update</button>
-                                <a class="btn btn-secondary" href="{% url 'blog:post-list' %}">Cancel </a>
+                                <a class="btn btn-secondary" href="{% url 'accounts:profile' user.uid %}">Cancel </a>
                             </div>
                         </form>
                     </div>

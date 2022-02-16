@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{% load post_read_time %}
+
 {% block title %} {{ post.title }} {% endblock %}
 
 {% block main %}
@@ -22,8 +24,8 @@
                     <div class="d-flex">
                         <div>
                             <div class="text-muted">
-                                <span>Feb 12</span><span class="dot"></span>
-                                <span>5 min read</span>
+                                <span>{{ post.last_update|date:"M d" }}</span><span class="dot"></span>
+                                <span>{{ post.content|readtime }}</span>
                             </div>
                         </div>
                     </div>
@@ -41,58 +43,8 @@
                     </button>
                     {% endif %}
                 </div>
-                <div class="post-content mt-2">
-                    <p>
-                        This blog post shows a few different types of content that's
-                        supported and styled with Bootstrap. Basic typography, lists,
-                        tables, images, code, and more are all supported as expected.
-                    </p>
-                    <p>
-                        This is some additional paragraph placeholder content. It has been
-                        written to fill the available space and show how a longer snippet
-                        of text affects the surrounding content. We'll repeat it often to
-                        keep the demonstration flowing, so be on the lookout for this
-                        exact same string of text.
-                    </p>
-                    <p>
-                        This is some additional paragraph placeholder content. It has been
-                        written to fill the available space and show how a longer snippet
-                        of text affects the surrounding content. We'll repeat it often to
-                        keep the demonstration flowing, so be on the lookout for this
-                        exact same string of text.
-                    </p>
-                    <h3>Example lists</h3>
-                    <p>
-                        This is some additional paragraph placeholder content. It's a
-                        slightly shorter version of the other highly repetitive body text
-                        used throughout. This is an example unordered list:
-                    </p>
-                    <ul>
-                        <li>First list item</li>
-                        <li>Second list item with a longer description</li>
-                        <li>Third list item to close it out</li>
-                    </ul>
-                    <p>
-                        This is some additional paragraph placeholder content. It has been
-                        written to fill the available space and show how a longer snippet
-                        of text affects the surrounding content. We'll repeat it often to
-                        keep the demonstration flowing, so be on the lookout for this
-                        exact same string of text.
-                    </p>
-                    <h3>Sub-heading</h3>
-                    <p>
-                        This is some additional paragraph placeholder content. It has been
-                        written to fill the available space and show how a longer snippet
-                        of text affects the surrounding content. We'll repeat it often to
-                        keep the demonstration flowing, so be on the lookout for this
-                        exact same string of text.
-                    </p>
-                    <pre><code>Example code block</code></pre>
-                    <p>
-                        This is some additional paragraph placeholder content. It's a
-                        slightly shorter version of the other highly repetitive body text
-                        used throughout.
-                    </p>
+                <div class="article-post mt-2">
+                    {{ post.content|safe }}
                 </div>
                 <div class="mt-5">
                     <span class="me-2"><strong>Tags: </strong></span>
@@ -125,7 +77,14 @@
                         <div class="d-flex align-items-end justify-content-md-between mb-1">
                             <a href="{% url 'accounts:profile' post.author.uid %}"
                                 class="author-link my-0 me-2">{{ post.author.get_full_name }}</a>
-                            <button class="btn btn-sm btn-primary follow">Follow</button>
+                            {% if request.user != post.author %}
+                            {% if request.user in post.author.profile.followers %}
+                            <button class="btn btn-sm btn-outline-primary follow"
+                                value="{{ post.author.pk }}">Following</button>
+                            {% else %}
+                            <button class="btn btn-sm btn-primary follow" value="{{ post.author.pk }}">Follow</button>
+                            {% endif %}
+                            {% endif %}
                         </div>
                         <div>
                             {{ post.author.profile.title }}

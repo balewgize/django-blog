@@ -17,7 +17,13 @@
                             {{ form|crispy }}
                             <div>
                                 <button class="btn btn-primary mr-2" type="submit" id="submitBtn">Update</button>
-                                <a class="btn btn-secondary" href="{% url 'blog:post-list' %}">Cancel </a>
+                                {% if post.status == 0 %}
+                                <!-- It was draft post, return back to draft page -->
+                                <a class="btn btn-secondary" href="{% url 'accounts:draft' post.author.uid %}">Cancel
+                                </a>
+                                {% else %}
+                                <a class="btn btn-secondary" href="{% url 'blog:post-detail' post.slug %}">Cancel </a>
+                                {% endif %}
                             </div>
                         </form>
                     </div>

@@ -49,8 +49,8 @@ class DraftPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_queryset(self):
         return (
-            Post.objects.filter(author=self.user)
-            .select_related("post")
+            Post.objects.filter(author=self.request.user)
+            .select_related("category")
             .filter(status=0)
             .order_by("-last_update")
         )
@@ -70,7 +70,7 @@ class SavedPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_queryset(self):
         return (
             Bookmark.objects.select_related("post")
-            .filter(user=self.user)
+            .filter(user=self.request.user)
             .order_by("-saved_at")
         )
 

@@ -87,6 +87,16 @@ margin-right: 5px;
     background: rgba(0, 0, 0, 0.07);
     text-decoration: none;
 }
+.article-post {
+    font-family: Merriweather;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: rgba(0, 0, 0, 0.8);
+}
+.article-post p,
+.article-post blockquote {
+  margin: 0 0 1.5rem 0;
+}
 /* Account page styles */
 .a-hero {
     background: #eae7dc;

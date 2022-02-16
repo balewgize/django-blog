@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load post_read_time %}
+
 {% block title %} Draft posts {% endblock %}
 
 {% block main %}
@@ -21,21 +23,15 @@
                         <div>
                             <a class="d-none d-md-inline category-btn"
                                 href="{% url 'blog:category' post.category.slug %}">{{ post.category }}</a>
-                            <span>Feb 12</span><span class="dot"></span><span>5 min read</span>
-
+                            <span>{{ post.last_update|date:"M d" }}</span><span
+                                class="dot"></span><span>{{ post.content|readtime }}</span>
                         </div>
-                        {% if request.user == post.author %}
                         <div class="action">
                             <a href="{% url 'blog:post-update' post.slug %}" title="Edit post"><i
                                     class="far fa-edit"></i></a>
                             <a href="{% url 'blog:post-delete' post.slug %}" class="ms-1" title="Delete post"><i
                                     class="fas fa-trash"></i></a>
                         </div>
-                        {% else %}
-                        <button class="bookmark" title="Bookmark story">
-                            <i class="far fa-bookmark"></i>
-                        </button>
-                        {% endif %}
                     </div>
                 </div>
                 <!-- End author post -->

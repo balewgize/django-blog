@@ -24,7 +24,13 @@
                     <form method="POST"> {% csrf_token %}
                         <div>
                             <button class="btn btn-danger" type="submit">Yes, Delete </button>
+                            {% if post.status == 0 %}
+                            <!-- It was draft post, return back to draft page -->
+                            <a class="btn btn-secondary" href="{% url 'accounts:draft' post.author.uid %}">Cancel
+                            </a>
+                            {% else %}
                             <a class="btn btn-secondary" href="{% url 'blog:post-detail' post.slug %}">Cancel </a>
+                            {% endif %}
                         </div>
                     </form>
                 </div>

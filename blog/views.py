@@ -14,7 +14,15 @@ class HomePageView(View):
     """Show landing page of the website."""
 
     def get(self, request):
-        return render(request, "blog/landing_page.html")
+        # Show popular posts on the home page
+        featured_posts = (
+            Post.objects.select_related("category").select_related("author").all()[:]
+        )
+        return render(
+            request,
+            "blog/landing_page.html",
+            context={"featured_posts": featured_posts},
+        )
 
 
 class PostListView(ListView):
