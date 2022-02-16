@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -16,7 +17,7 @@ class HomePageView(View):
     def get(self, request):
         # Show popular posts on the home page
         featured_posts = (
-            Post.objects.select_related("category").select_related("author").all()[:]
+            Post.objects.select_related("category").select_related("author").all()[:10]
         )
         return render(
             request,
@@ -30,6 +31,7 @@ class PostListView(ListView):
 
     template_name = "blog/index.html"
     context_object_name = "posts"
+    paginate_by = 5
 
     def get_queryset(self):
         return (
@@ -195,3 +197,27 @@ def comments(request, slug):
         "post": post,
     }
     return render(request, "blog/comment.html", context)
+
+
+# def load_more_post(request):
+#     """Load more posts dynamically."""
+#     from django.core.serializers import serialize
+
+#     limit = 5
+#     offset = int(request.GET.get("offset", 1))
+#     more_posts = list(
+#         Post.objects.filter(status=1).values(
+#             "pk",
+#             "title",
+#             "slug",
+#             "last_update",
+#             "author__first_name",
+#             "author__last_name",
+#             "author__uid",
+#             "category__slug",
+#             "category__name",
+#             "content",
+#         )[offset : offset + limit]
+#     )
+
+#     return JsonResponse(data={"data": more_posts}, status=200)

@@ -11,7 +11,7 @@
 <div class="container-fluid main">
     <div class="container px-md-5 pt-5">
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-lg-8">
                 {% if messages %}
                 {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show pb-2" role="alert">
@@ -48,8 +48,38 @@
                     </div>
                 </div>
                 {% endfor %}
+                <br>
+                <div class="container my-5 pb-5 d-flex justify-content-center">
+                    <div class="pagination">
+                        {% if page_obj.has_previous %}
+                        <a href="?page=1" class="mx-2" title="First"><i class="fas fa-angle-double-left"></i></a>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="mx-2" title="Previous"><i
+                                class="fas fa-angle-left"></i></a>
+                        {% else %}
+                        <span class="text-primary"><i class="fas fa-angle-double-left mx-2"></i></span>
+                        <span class="text-primary">
+                            <i class="fas fa-angle-left mx-2"></i>
+                        </span>
+                        {% endif %}
+
+                        <span class="current mx-2">
+                            {{ page_obj.number }}
+                        </span>
+
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="mx-2" title="Next"><i
+                                class="fas fa-angle-right"></i></a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="mx-2" title="Last"><i
+                                class="fas fa-angle-double-right"></i></a>
+                        {% else %}
+                        <span class="text-primary">
+                            <i class="fas fa-angle-right mx-2"></i>
+                        </span>
+                        <span class="text-primary"><i class="fas fa-angle-double-right mx-2"></i></span>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-1"></div>
             <div class="col-lg-4 d-none d-lg-block">
                 <div class="position-sticky" style="top: 2rem">
                     <div class="p-4 mb-3 bg-light rounded">
@@ -81,6 +111,8 @@
         </div>
     </div>
 </div>
+
+{% include "footer.html" %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
