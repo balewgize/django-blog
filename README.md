@@ -15,13 +15,13 @@ If you like the idea or found the project helpful, consider ```forking``` and ``
 - Multi user
 - Email verification
 - Profile for users
-- Bookmark posts (soon)
+- Bookmark posts 
 - Social login (soon)
-- Follow and Following (soon)
 - Draft and Published posts
 - CRUD posts with permission
 - Custom user model with email login
 - Bootstrap for front end
+- Follow and Following 
 
 
 ## How to use

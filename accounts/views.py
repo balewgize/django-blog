@@ -23,6 +23,7 @@ class UserProfileView(ListView):
 
     context_object_name = "author_posts"
     template_name = "accounts/user_profile.html"
+    paginate_by = 10
 
     def get_queryset(self):
         # Filtering posts by the user only
@@ -32,7 +33,6 @@ class UserProfileView(ListView):
             .select_related("category")
             .select_related("author")
             .filter(status=1)
-            .order_by("-last_update")
         )
 
     def get_context_data(self, **kwargs):

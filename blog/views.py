@@ -1,13 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 
-from .models import Post, Comment
+from accounts.models import Account
+from .models import Category, Post, Comment
 from .forms import CommentForm
 
 
@@ -19,10 +19,14 @@ class HomePageView(View):
         featured_posts = (
             Post.objects.select_related("category").select_related("author").all()[:10]
         )
+        popular_categories = Category.objects.all()[:6]
         return render(
             request,
             "blog/landing_page.html",
-            context={"featured_posts": featured_posts},
+            context={
+                "featured_posts": featured_posts,
+                "popular_categories": popular_categories,
+            },
         )
 
 
@@ -31,7 +35,7 @@ class PostListView(ListView):
 
     template_name = "blog/index.html"
     context_object_name = "posts"
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         return (
@@ -39,6 +43,23 @@ class PostListView(ListView):
             .select_related("author")
             .filter(status=1)
         )
+
+    def get_context_data(self, **kwargs):
+        """Return list of posts, popular authors, and popular categories."""
+        context = super().get_context_data(**kwargs)
+        popular_authors = self.get_popular_authors()
+        popular_categories = self.get_popular_categories()
+        context["popular_authors"] = popular_authors
+        context["popular_categories"] = popular_categories
+        return context
+
+    def get_popular_categories(self):
+        """Return most popular categories."""
+        return Category.objects.all()[:6]
+
+    def get_popular_authors(self):
+        """Return the top 5 popular authors."""
+        return Account.objects.select_related("profile").all()[:5]
 
 
 class PostDetailView(DetailView):
@@ -121,13 +142,21 @@ class CategoryView(ListView):
     model = Post
     template_name = "blog/category.html"
     context_object_name = "category_posts"
+    paginate_by = 10
 
     def get_queryset(self):
         return (
             Post.objects.select_related("category")
             .select_related("author")
             .filter(category__slug=self.kwargs.get("slug"))
+            .filter(status=1)
         )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        popular_categories = Category.objects.all()[:6]
+        context["popular_categories"] = popular_categories
+        return context
 
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -197,27 +226,3 @@ def comments(request, slug):
         "post": post,
     }
     return render(request, "blog/comment.html", context)
-
-
-# def load_more_post(request):
-#     """Load more posts dynamically."""
-#     from django.core.serializers import serialize
-
-#     limit = 5
-#     offset = int(request.GET.get("offset", 1))
-#     more_posts = list(
-#         Post.objects.filter(status=1).values(
-#             "pk",
-#             "title",
-#             "slug",
-#             "last_update",
-#             "author__first_name",
-#             "author__last_name",
-#             "author__uid",
-#             "category__slug",
-#             "category__name",
-#             "content",
-#         )[offset : offset + limit]
-#     )
-
-#     return JsonResponse(data={"data": more_posts}, status=200)

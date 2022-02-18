@@ -97,6 +97,13 @@ margin-right: 5px;
 .article-post blockquote {
   margin: 0 0 1.5rem 0;
 }
+#arrowonhover span {
+    display: none;
+}
+#arrowonhover:hover span {
+    display: inline-block;
+}
+
 /* Account page styles */
 .a-hero {
     background: #eae7dc;
