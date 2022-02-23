@@ -1,10 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from accounts.models import Account
 from .models import Category, Post, Comment
@@ -15,7 +15,11 @@ class HomePageView(View):
     """Show landing page of the website."""
 
     def get(self, request):
-        # Show popular posts on the home page
+        # if the user is authenticated, redirect to stories
+        if request.user.is_authenticated:
+            return redirect(to=reverse("blog:post-list"))
+
+        # Show popular posts on the home page (guest users)
         featured_posts = (
             Post.objects.select_related("category").select_related("author").all()[:10]
         )

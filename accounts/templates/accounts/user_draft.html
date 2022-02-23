@@ -9,40 +9,43 @@
 <div class="container-fluid">
     <div class="px-md-5 pt-4">
         <div class="row">
-            <!-- Author posts -->
-            {% if draft_posts|length > 0 %}
-            {% for post in draft_posts %}
-            <div class="col-12 col-lg-6 mx-auto">
-                <div class="mycard">
-                    <div class="d-flex flex-column">
-                        <h4 class="card-title">
-                            <a href="{% url 'blog:post-detail' post.slug %}" class="mb-2 lh-sm">{{ post.title }}</a>
-                        </h4>
-                    </div>
-                    <div class="mb-0 text-muted d-flex align-items-end align-items-md-center justify-content-between">
-                        <div>
-                            <a class="d-none d-md-inline category-btn"
-                                href="{% url 'blog:category' post.category.slug %}">{{ post.category }}</a>
-                            <span>{{ post.last_update|date:"M d" }}</span><span
-                                class="dot"></span><span>{{ post.content|readtime }}</span>
+            <div class="col-md-8">
+                <!-- Author posts -->
+                {% if draft_posts|length > 0 %}
+                {% for post in draft_posts %}
+                <div class="col-12 mx-auto">
+                    <div class="mycard">
+                        <div class="d-flex flex-column">
+                            <h4 class="card-title">
+                                <a href="{% url 'blog:post-detail' post.slug %}" class="mb-2 lh-sm">{{ post.title }}</a>
+                            </h4>
                         </div>
-                        <div class="action">
-                            <a href="{% url 'blog:post-update' post.slug %}" title="Edit post"><i
-                                    class="far fa-edit"></i></a>
-                            <a href="{% url 'blog:post-delete' post.slug %}" class="ms-1" title="Delete post"><i
-                                    class="fas fa-trash"></i></a>
+                        <div
+                            class="mb-0 text-muted d-flex align-items-end align-items-md-center justify-content-between">
+                            <div>
+                                <a class="d-none d-md-inline category-btn"
+                                    href="{% url 'blog:category' post.category.slug %}">{{ post.category }}</a>
+                                <span>{{ post.last_update|date:"M d" }}</span><span
+                                    class="dot"></span><span>{{ post.content|readtime }}</span>
+                            </div>
+                            <div class="action">
+                                <a href="{% url 'blog:post-update' post.slug %}" title="Edit post"><i
+                                        class="far fa-edit"></i></a>
+                                <a href="{% url 'blog:post-delete' post.slug %}" class="ms-1" title="Delete post"><i
+                                        class="fas fa-trash"></i></a>
+                            </div>
                         </div>
                     </div>
+                    <!-- End author post -->
+                    <hr class="my-3" />
                 </div>
-                <!-- End author post -->
-                <hr class="my-3" />
+                {% endfor %}
+                {% else %}
+                <div class="col-12 col-lg-6 mx-auto">
+                    <p>You don't have any draft posts yet. Start writing to edit it any time.</p>
+                </div>
+                {% endif %}
             </div>
-            {% endfor %}
-            {% else %}
-            <div class="col-12 col-lg-6 mx-auto">
-                <p>You don't have any draft posts yet. Start writing to edit it any time.</p>
-            </div>
-            {% endif %}
         </div>
     </div>
 </div>
