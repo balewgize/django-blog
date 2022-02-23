@@ -24,7 +24,10 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ["DJANGO_DEBUG"]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "tomar-blogs.herokuapp.com",
+    "127.0.0.1",
+]
 
 # Application definition
 
