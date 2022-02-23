@@ -21,7 +21,9 @@ class HomePageView(View):
 
         # Show popular posts on the home page (guest users)
         featured_posts = (
-            Post.objects.select_related("category").select_related("author").all()[:10]
+            Post.objects.select_related("category")
+            .select_related("author")
+            .filter(status=1)[:10]
         )
         popular_categories = Category.objects.all()[:6]
         return render(
