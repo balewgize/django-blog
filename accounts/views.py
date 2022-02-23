@@ -211,23 +211,30 @@ def signup(request):
         # the user has submitted the form (POST request): get the data submitted
         signup_form = SignupForm(request.POST)
         if signup_form.is_valid():
-            user = signup_form.save(commit=False)
-            user.is_active = False  # until the user confirms the email
-            user.save()
-            current_site = get_current_site(request)
-            mail_subject = "Verify your email address"
-            message = render_to_string(
-                "accounts/confirm_email.html",
-                {
-                    "user": user,
-                    "domain": current_site.domain,
-                    "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-                    "token": email_confirmation_token.make_token(user),
-                },
-            )
-            to_email = signup_form.cleaned_data.get("email")
-            email = EmailMessage(mail_subject, message, to=[to_email])
-            email.send()
+            try:
+                user = signup_form.save(commit=False)
+                user.is_active = False  # until the user confirms the email
+                user.save()
+
+                # send verification email
+                current_site = get_current_site(request)
+                mail_subject = "Verify your email address"
+                message = render_to_string(
+                    "accounts/confirm_email.html",
+                    {
+                        "user": user,
+                        "domain": current_site.domain,
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "token": email_confirmation_token.make_token(user),
+                    },
+                )
+                to_email = signup_form.cleaned_data.get("email")
+                email = EmailMessage(mail_subject, message, to=[to_email])
+                email.send()
+            except Exception as error:
+                print("Error: Error occurred while registering the user. Retrying...")
+                print(error.with_traceback())
+
             # Set user email to session variable to pass it to another view
             first_name = signup_form.cleaned_data.get("first_name")
             request.session["first_name"] = first_name

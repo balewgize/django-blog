@@ -55,12 +55,11 @@ pip install -r requirements.txt
 ```
 django-admin shell
 ```
-
 ```
 from django.core.management.utils import get_random_secret_key
 ```
 ```
-get_random_secret_key
+get_random_secret_key()
 ```
 - Assign the output (without quotes) to SECRET_KEY in .env 
 
