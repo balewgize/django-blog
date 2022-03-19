@@ -49,9 +49,11 @@
                                 class="fas fa-angle-left"></i></a>
                         {% endif %}
 
+                        {% if category_posts|length > 10 %}
                         <span class="current mx-2">
                             {{ page_obj.number }}
                         </span>
+                        {% endif %}
 
                         {% if page_obj.has_next %}
                         <a href="?page={{ page_obj.next_page_number }}" class="mx-2 px-1" title="Next Page"><i
