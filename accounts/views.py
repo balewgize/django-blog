@@ -80,7 +80,7 @@ class SavedPostList(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return self.request.user == self.user
 
 
-class Bookmark(View):
+class BookmarkPost(View):
     """Handle bookmarking post using ajax calls."""
 
     def post(self, request):
@@ -149,7 +149,7 @@ class Follow(View):
             return JsonResponse({"not_authenticated": True}, status=401)
 
 
-class Like(View):
+class LikePost(View):
     """Handle like and unlike posts."""
 
     def post(self, request):
