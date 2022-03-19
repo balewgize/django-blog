@@ -18,7 +18,7 @@ from .models import Account, Bookmark, Like, UserFollowing
 from .tokens import email_confirmation_token
 
 
-class UserProfileView(ListView):
+class UserProfile(ListView):
     """Show profile of the user and all posts posted by the user."""
 
     context_object_name = "author_posts"
@@ -41,7 +41,7 @@ class UserProfileView(ListView):
         return context
 
 
-class DraftPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+class DraftPostList(LoginRequiredMixin, UserPassesTestMixin, ListView):
     """Show list of draft post that has not been published."""
 
     template_name = "accounts/user_draft.html"
@@ -61,7 +61,7 @@ class DraftPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return self.request.user == self.user
 
 
-class SavedPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+class SavedPostList(LoginRequiredMixin, UserPassesTestMixin, ListView):
     """Show list of bookmarked posts."""
 
     template_name = "accounts/user_saved.html"
@@ -80,7 +80,7 @@ class SavedPostView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return self.request.user == self.user
 
 
-class BookmarkPost(View):
+class Bookmark(View):
     """Handle bookmarking post using ajax calls."""
 
     def post(self, request):
@@ -110,7 +110,7 @@ class BookmarkPost(View):
             return JsonResponse({"is_bookmarked": False}, status=401)
 
 
-class FollowView(View):
+class Follow(View):
     """Handle Follow and Unfollow process."""
 
     def post(self, request):
@@ -149,7 +149,7 @@ class FollowView(View):
             return JsonResponse({"not_authenticated": True}, status=401)
 
 
-class LikeView(View):
+class Like(View):
     """Handle like and unlike posts."""
 
     def post(self, request):

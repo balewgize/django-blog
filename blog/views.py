@@ -11,7 +11,7 @@ from .models import Category, Post, Comment
 from .forms import CommentForm
 
 
-class HomePageView(View):
+class HomePage(View):
     """Show landing page of the website."""
 
     def get(self, request):
@@ -36,7 +36,7 @@ class HomePageView(View):
         )
 
 
-class PostListView(ListView):
+class PostList(ListView):
     """Show the list of posts."""
 
     template_name = "blog/index.html"
@@ -68,7 +68,7 @@ class PostListView(ListView):
         return Account.objects.select_related("profile").all()[:5]
 
 
-class PostDetailView(DetailView):
+class PostDetail(DetailView):
     """Show the detail of a single post."""
 
     model = Post
@@ -83,7 +83,7 @@ class PostDetailView(DetailView):
         )
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreate(LoginRequiredMixin, CreateView):
     """Display post creation form and handle the process."""
 
     model = Post
@@ -101,7 +101,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class PostUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """Display post update form and handle the process."""
 
     model = Post
@@ -124,7 +124,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.get_object().author == self.request.user
 
 
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class PostDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     """Display post deletion form and handle the process."""
 
     model = Post
@@ -165,7 +165,7 @@ class CategoryView(ListView):
         return context
 
 
-class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class CommentUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """Display comment update form and handle the process."""
 
     model = Comment
@@ -187,7 +187,7 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.get_object().author == self.request.user
 
 
-class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class CommentDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     """Display comment deletion form and handle the process."""
 
     model = Comment
