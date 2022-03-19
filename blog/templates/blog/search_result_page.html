@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% load post_read_time %}
+
+{% block title %} Home {% endblock %}
+
+{% block main %}
+
+{% include "navbar.html" %}
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-md-8">
+            <!-- search results -->
+            {% if search_results|length > 0%}
+            <div class="col-12 col-lg-9 mx-auto mb-3 small text-muted">
+                <i>{{ search_results|length }} posts found matching your search </i>
+            </div>
+            {% for post in search_results %}
+            <div class="col-12 col-lg-9 mx-auto mt-3">
+                <div class="mycard">
+                    <div class="d-flex flex-column">
+                        <h4 class="card-title">
+                            <a href="{% url 'blog:post-detail' post.slug %}" class="mb-2 lh-sm">{{ post.title }}</a>
+                        </h4>
+                        <p class="card-text mb-2 lh-base">
+                            {{ post.content|truncatechars_html:130|safe }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <br>
+            <div class="container my-5 pb-5 d-flex justify-content-center">
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                    <a href="?page=1" class="mx-2 ps-1" title="First Page"><i class="fas fa-angle-double-left"></i></a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="mx-2 px-1" title="Previous Page"><i
+                            class="fas fa-angle-left"></i></a>
+                    {% endif %}
+
+                    <span class="current mx-2">
+                        {{ page_obj.number }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="mx-2 px-1" title="Next Page"><i
+                            class="fas fa-angle-right"></i></a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="mx-2 pe-1" title="Last Page"><i
+                            class="fas fa-angle-double-right"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 col-lg-7 mx-auto">
+                <p><strong>Oops! No results found matching your search.</strong></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock main %}

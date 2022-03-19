@@ -49,8 +49,8 @@
                 </li>
                 {% endif %}
             </ul>
-            <form>
-                <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+            <form action="{% url 'blog:search' %}" method="get">
+                <input name="q" type="search" class="form-control" placeholder="Search" aria-label="Search">
             </form>
         </div>
     </div>

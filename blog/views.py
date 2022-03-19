@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -232,3 +233,24 @@ def comments(request, slug):
         "post": post,
     }
     return render(request, "blog/comment.html", context)
+
+
+class SearchResultsList(ListView):
+    """Show the list of search results."""
+
+    model = Post
+    context_object_name = "search_results"
+    template_name = "blog/search_result_page.html"
+
+    def get_queryset(self):
+        # query entered by the user
+        query = self.request.GET["q"]
+        search_vector = SearchVector("title", "content")
+        search_query = SearchQuery(query)
+        return (
+            Post.objects.annotate(
+                search=search_vector, rank=SearchRank(search_vector, search_query)
+            )
+            .filter(search=search_query)
+            .order_by("-rank")
+        )
