@@ -4,16 +4,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import ListView, View
 
 from blog.models import Post
-from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm
+
+from .forms import LoginForm, ProfileUpdateForm, SignupForm, UserUpdateForm
 from .models import Account, Bookmark, Like, UserFollowing
 from .tokens import email_confirmation_token
 

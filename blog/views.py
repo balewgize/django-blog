@@ -1,15 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
-from django.shortcuts import redirect, render
-from django.views.generic import ListView, DetailView, View
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.contrib.postgres.search import (SearchQuery, SearchRank,
+                                            SearchVector)
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import DetailView, ListView, View
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from accounts.models import Account
-from .models import Category, Post, Comment
+
 from .forms import CommentForm
+from .models import Category, Comment, Post
 
 
 class HomePage(View):

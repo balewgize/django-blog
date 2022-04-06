@@ -1,7 +1,7 @@
-from django.db import models
-from django.conf import settings
-from django.urls import reverse
 from ckeditor.fields import RichTextField
+from django.conf import settings
+from django.db import models
+from django.urls import reverse
 
 from common import utils
 

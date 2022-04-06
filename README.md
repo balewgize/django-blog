@@ -2,15 +2,17 @@
 
 Multi-user Blog website built with ```Django 3.2.12``` and ```Bootstrap 5.1.3```
 
+
+## Guest credentials
+use the following credentials to test the website without creating an account
+- Email: guest@tomar.com
+- Password: Welcome/5432
+
+
 My aim of creating this website is to build a free and easy to use website where anyone can share tuorials, tips & tricks, best practices and experience with others and build a community.
 
 <strong>If you want to share what you learned to help others and yourself, please consider
  contributing to the project, either in development or by writing posts on the website. </strong>
-
-
-## Guest credentials
-email: guest@tomar.com
-password: Welcome/5432
 
 ## Features
 - Multi user

@@ -1,5 +1,5 @@
-from django import template
 import readtime
+from django import template
 
 
 def estimated_read_time(content):

@@ -1,7 +1,7 @@
 """Helper functions used across all apps."""
 
-from django.utils.text import slugify
 from django.utils.crypto import get_random_string
+from django.utils.text import slugify
 
 
 def generate_slug(Klass, base_word):

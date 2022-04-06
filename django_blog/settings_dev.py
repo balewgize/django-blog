@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+
 from django.contrib.messages import constants as messages
+from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env
 
